@@ -1,16 +1,15 @@
 import React, { useRef } from "react";
 import {
-  StyleSheet,
   View,
   TextInput,
   TouchableOpacity,
   Text,
-  Button,
   ToastAndroid,
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
+import { authPageStyle } from "../styles/Styles";
 
-const Login = (props) => {
+const Login = ({ navigation }) => {
   const usernameRef = useRef("");
   const passwordRef = useRef("");
 
@@ -38,7 +37,9 @@ const Login = (props) => {
     } else {
       // Checking the stored password with Input
       if (password === passwordRef.current) {
-        alert("Success");
+        AsyncStorage.setItem("loggedIn", "true").then(() => {
+          navigation.replace("Dashboard");
+        });
       } else {
         ToastAndroid.show("Incorrect password!", ToastAndroid.LONG);
       }
@@ -46,56 +47,45 @@ const Login = (props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        textContentType="username"
-        onChangeText={(value) => {
-          usernameRef.current = value;
+    <View style={authPageStyle.container}>
+      <View style={authPageStyle.inputHolder}>
+        <TextInput
+          style={authPageStyle.input}
+          placeholder="Username"
+          textContentType="username"
+          onChangeText={(value) => {
+            usernameRef.current = value;
+          }}
+        />
+        <TextInput
+          style={authPageStyle.input}
+          secureTextEntry
+          placeholder="Password"
+          textContentType="password"
+          onChangeText={(value) => {
+            passwordRef.current = value;
+          }}
+        />
+      </View>
+      <TouchableOpacity
+        activeOpacity={0.6}
+        style={authPageStyle.button}
+        onPress={handleLogin}
+      >
+        <Text style={authPageStyle.text}>LOG IN</Text>
+      </TouchableOpacity>
+      <Text
+        style={{ ...authPageStyle.text, padding: 24 }}
+        onPress={() => {
+          if (navigation) {
+            navigation.navigate("SignUp");
+          }
         }}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        textContentType="password"
-        onChangeText={(value) => {
-          passwordRef.current = value;
-        }}
-      />
-      {/* <TouchableOpacity style={styles.button}>
-        <Text style={{ width: "100%", textAlign: "center" }}>Sign Up</Text>
-      </TouchableOpacity> */}
-      <Button title="Log in" onPress={handleLogin} />
-      <Text style={{ width: "100%", textAlign: "center" }}>
+      >
         New User? Sign up.
       </Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    // elevation: 8,
-    backgroundColor: "#c1c1c1",
-    borderRadius: 8,
-    // margin: "3%",
-  },
-  input: {
-    // padding: "4%",
-    margin: "2%",
-    borderBottomColor: "#262626",
-    // borderWidth: 2,
-    borderRadius: 8,
-    borderBottomWidth: 2,
-    paddingHorizontal: 8,
-    paddingVertical: 16,
-    fontSize: 24,
-  },
-  button: {
-    textAlign: "center",
-    width: "100%",
-  },
-});
 
 export default Login;

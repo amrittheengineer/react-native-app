@@ -1,17 +1,15 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useRef } from "react";
 import {
-  StyleSheet,
   View,
   TextInput,
   TouchableOpacity,
   Text,
-  Button,
   ToastAndroid,
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
+import { authPageStyle } from "../styles/Styles";
 
-const SignUp = (props) => {
+const SignUp = ({ navigation }) => {
   const usernameRef = useRef("");
   const passwordRef = useRef("");
 
@@ -52,56 +50,44 @@ const SignUp = (props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        textContentType="username"
-        onChangeText={(value) => {
-          usernameRef.current = value;
+    <View style={authPageStyle.container}>
+      <View style={authPageStyle.inputHolder}>
+        <TextInput
+          style={authPageStyle.input}
+          placeholder="Username"
+          textContentType="username"
+          onChangeText={(value) => {
+            usernameRef.current = value;
+          }}
+        />
+        <TextInput
+          style={authPageStyle.input}
+          placeholder="Password"
+          textContentType="password"
+          onChangeText={(value) => {
+            passwordRef.current = value;
+          }}
+        />
+      </View>
+      <TouchableOpacity
+        activeOpacity={0.6}
+        style={authPageStyle.button}
+        onPress={handleSignup}
+      >
+        <Text style={authPageStyle.text}>SIGN UP</Text>
+      </TouchableOpacity>
+      <Text
+        style={{ ...authPageStyle.text, padding: 24 }}
+        onPress={() => {
+          if (navigation) {
+            navigation.replace("Login");
+          }
         }}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        textContentType="password"
-        onChangeText={(value) => {
-          passwordRef.current = value;
-        }}
-      />
-      {/* <TouchableOpacity style={styles.button}>
-        <Text style={{ width: "100%", textAlign: "center" }}>Sign Up</Text>
-      </TouchableOpacity> */}
-      <Button title="Sign Up" onPress={handleSignup} />
-      <Text style={{ width: "100%", textAlign: "center" }}>
+      >
         Already have an account? Log in.
       </Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    // elevation: 8,
-    backgroundColor: "#c1c1c1",
-    borderRadius: 8,
-    // margin: "3%",
-  },
-  input: {
-    // padding: "4%",
-    margin: "2%",
-    borderBottomColor: "#262626",
-    // borderWidth: 2,
-    borderRadius: 8,
-    borderBottomWidth: 2,
-    paddingHorizontal: 8,
-    paddingVertical: 16,
-    fontSize: 24,
-  },
-  button: {
-    textAlign: "center",
-    width: "100%",
-  },
-});
 
 export default SignUp;
