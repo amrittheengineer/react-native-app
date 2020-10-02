@@ -1,0 +1,12 @@
+{
+  "name": "TaskLearniti",
+  "displayName": "TaskLearniti",
+  "expo": {
+    "name": "TaskLearniti",
+    "slug": "TaskLearniti",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
