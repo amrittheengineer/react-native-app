@@ -47,7 +47,7 @@ const SignUp = ({ navigation }) => {
       await AsyncStorage.setItem(usernameRef.current, passwordRef.current)
         .then(() => {
           ToastAndroid.show("User created successfully!", ToastAndroid.LONG);
-          navigation.goBack();
+          navigation.replace("Login");
         })
         .catch((err) => {
           console.error(err);
