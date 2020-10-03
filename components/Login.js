@@ -1,17 +1,20 @@
 import React, { useRef } from "react";
 import {
   View,
-  TextInput,
+  Dimensions,
   TouchableOpacity,
   Text,
   ToastAndroid,
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
-import { authPageStyle } from "../styles/Styles";
+import { authPageStyle, PRIMARY_COLOR } from "../styles/Styles";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Input from "./Input";
 
 const Login = ({ navigation }) => {
   const usernameRef = useRef("");
   const passwordRef = useRef("");
+  const SCREEN_WIDTH = Dimensions.get("window").width;
 
   const handleLogin = async () => {
     //   Checking the username
@@ -48,23 +51,29 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={authPageStyle.container}>
+      <MaterialCommunityIcons
+        name="account-circle"
+        style={authPageStyle.avatar}
+        size={SCREEN_WIDTH * 0.4}
+        color={PRIMARY_COLOR}
+      />
       <View style={authPageStyle.inputHolder}>
-        <TextInput
-          style={authPageStyle.input}
+        <Input
           placeholder="Username"
           textContentType="username"
           onChangeText={(value) => {
             usernameRef.current = value;
           }}
+          icon="user"
         />
-        <TextInput
-          style={authPageStyle.input}
+        <Input
           secureTextEntry
           placeholder="Password"
           textContentType="password"
           onChangeText={(value) => {
             passwordRef.current = value;
           }}
+          icon="lock"
         />
       </View>
       <TouchableOpacity
@@ -75,10 +84,14 @@ const Login = ({ navigation }) => {
         <Text style={authPageStyle.text}>LOG IN</Text>
       </TouchableOpacity>
       <Text
-        style={{ ...authPageStyle.text, padding: 24 }}
+        style={{
+          ...authPageStyle.text,
+          padding: 24,
+          textDecorationLine: "underline",
+        }}
         onPress={() => {
           if (navigation) {
-            navigation.navigate("SignUp");
+            navigation.replace("SignUp");
           }
         }}
       >

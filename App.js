@@ -13,6 +13,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
+import { PRIMARY_COLOR } from "./styles/Styles";
+import AuthenticationStatus from "./components/Authentication";
 
 const Stack = createStackNavigator();
 
@@ -21,18 +23,24 @@ export default function App() {
   useEffect(() => {
     // Check whether the User has already logged in.
     AsyncStorage.getItem("loggedIn").then((value) => {
-      setLoggedInState(value !== null);
+      // Delay for clear UI transition and API response time.
+      setTimeout(() => {
+        setLoggedInState(value !== null);
+      }, 500);
     });
   }, []);
 
   return (
     <NavigationContainer>
-      <View style={{ ...styles.container, marginTop: StatusBar.currentHeight }}>
+      <StatusBar backgroundColor={PRIMARY_COLOR} />
+      <View style={{ ...styles.container }}>
         {loggedInState === null ? (
-          <ProgressBarAndroid />
+          // Page for showing Authntication State
+          <AuthenticationStatus />
         ) : (
           <Stack.Navigator
             initialRouteName={loggedInState ? "Dashboard" : "Login"}
+            screenOptions={{ headerStyle: { backgroundColor: PRIMARY_COLOR } }}
           >
             {/* If loggedInState changes from null, based on condition initial route is decided */}
             <Stack.Screen name="Login" component={Login} />
